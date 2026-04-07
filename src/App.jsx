@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 import ProductList from './components/ProductList'
 import FilterBar from './components/FilterBar'
-import axios from 'axios'
 
 function App() {
 
@@ -22,24 +22,22 @@ function App() {
         setIsLoading(false);
       }
     }
-
     fetchProducts()
   }, [])
 
-
-
-const handleCategoryChange = (category) => {
-  setFilterCategory(category)
-}
-
-const displayedProducts = products.filter((product) => {
+  
+  const displayedProducts = products.filter((product) => {
     const matchesCategory = filterCategory === "All" || product.category === filterCategory;
-    const matchesSearch = product?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
+  })
+  
+  const handleCategoryChange = (category) => {
+    setFilterCategory(category)
+  }
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value)
+  const handleSearchChange = (value) => {
+    setSearchTerm(value)
   }
 
   return (
@@ -47,23 +45,18 @@ const displayedProducts = products.filter((product) => {
       <header>
         <h1>React FakeStore</h1>
         <FilterBar
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        onCategoryChange={handleCategoryChange}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          onCategoryChange={handleCategoryChange}
         />
-
       </header>
       <main>
-
-
         {isLoading && <p>Loading products...</p>}
         {error && <p className='error-message'>{error}</p>}
 
         {!isLoading && !error && (
           <ProductList products={displayedProducts} />
         )}
-  
-
       </main>
     </div>
   )
