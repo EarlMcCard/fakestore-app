@@ -19,13 +19,28 @@ function App() {
     fetchProducts()
   }, [])
 
+  const [filterCategory, setFilterCategory] = useState("All")
+  const displayedProducts = filterCategory === "All" ? products : products.filter(product => product.category === filterCategory)
+  
+  const handleFilterChange = (category) => {
+    setFilterCategory(category)
+  }
+
+
   return (
     <div className='app-container'>
       <header>
-        <h1>My React FakeAPI Store</h1>
+        <h1>React FakeStore</h1>
+         <div className="filter-buttons">
+          <button onClick={() => handleFilterChange("All")}>All</button>
+          <button onClick={() => handleFilterChange("electronics")}>Electronics</button>
+          <button onClick={() => handleFilterChange("men's clothing")}>Mens Clothing</button>
+          <button onClick={() => handleFilterChange("women's clothing")}>Womens Clothing</button>
+          <button onClick={() => handleFilterChange("jewelery")}>Jewelery</button>
+         </div>
       </header>
       <main>
-        <ProductList products={products} />
+        <ProductList products={displayedProducts} />
       </main>
     </div>
   )
