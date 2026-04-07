@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProductList from './components/ProductList'
+import FilterBar from './components/FilterBar'
 import axios from 'axios'
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('https://fakestoreapi.com/products')
-        console.log(response.data)
+        // console.log(response.data)
         setProducts(response.data)
       } catch (err) {
         setError('Failed to fetch products. Please try again later.')
@@ -21,7 +22,11 @@ function App() {
   }, [])
 
 const [filterCategory, setFilterCategory] = useState("All")
-    
+
+const handleCategoryChange = (category) => {
+  setFilterCategory(category)
+}
+
 const [searchTerm, setSearchTerm] = useState("")
 
 const displayedProducts = products.filter((product) => {
@@ -29,10 +34,6 @@ const displayedProducts = products.filter((product) => {
     const matchesSearch = product?.name?.toLowerCase().includes(searchTerm?.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  const handleFilterChange = (category) => {
-    setFilterCategory(category)
-  }
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value)
@@ -42,26 +43,16 @@ const displayedProducts = products.filter((product) => {
     <div className='app-container'>
       <header>
         <h1>React FakeStore</h1>
+        <FilterBar
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
+        onCategoryChange={handleCategoryChange}
+        />
 
-          <div className="search-bar">
-            <input type="text" 
-            placeholder='Search for products...'
-            value={searchTerm}
-            onChange={handleSearchChange}
-            />
-          </div>
-
-         <div className="filter-buttons">
-          <button onClick={() => handleFilterChange("All")}>All</button>
-          <button onClick={() => handleFilterChange("electronics")}>Electronics</button>
-          <button onClick={() => handleFilterChange("men's clothing")}>Mens Clothing</button>
-          <button onClick={() => handleFilterChange("women's clothing")}>Womens Clothing</button>
-          <button onClick={() => handleFilterChange("jewelery")}>Jewelery</button>
-         </div>
       </header>
       <main>
         <ProductList products={displayedProducts} />
-        
+        {displayedProducts.length === 0 && <p>No products found.</p>}
       </main>
     </div>
   )
