@@ -6,32 +6,35 @@ import axios from 'axios'
 function App() {
 
   const [products, setProducts] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [filterCategory, setFilterCategory] = useState("All")
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('https://fakestoreapi.com/products')
-        // console.log(response.data)
         setProducts(response.data)
+        setIsLoading(false)
       } catch (err) {
-        setError('Failed to fetch products. Please try again later.')
+        setError("Failed to fetch products. Please try again later.")
+        setIsLoading(false);
       }
     }
+
     fetchProducts()
   }, [])
 
-const [filterCategory, setFilterCategory] = useState("All")
+
 
 const handleCategoryChange = (category) => {
   setFilterCategory(category)
 }
 
-const [searchTerm, setSearchTerm] = useState("")
-
 const displayedProducts = products.filter((product) => {
     const matchesCategory = filterCategory === "All" || product.category === filterCategory;
-    const matchesSearch = product?.name?.toLowerCase().includes(searchTerm?.toLowerCase());
+    const matchesSearch = product?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -51,8 +54,16 @@ const displayedProducts = products.filter((product) => {
 
       </header>
       <main>
-        <ProductList products={displayedProducts} />
-        {displayedProducts.length === 0 && <p>No products found.</p>}
+
+
+        {isLoading && <p>Loading products...</p>}
+        {error && <p className='error-message'>{error}</p>}
+
+        {!isLoading && !error && (
+          <ProductList products={displayedProducts} />
+        )}
+  
+
       </main>
     </div>
   )
