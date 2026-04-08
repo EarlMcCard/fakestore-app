@@ -1,15 +1,23 @@
+import {Row, Col} from 'react-bootstrap'
 import ProductItem from "./ProductItem"
 
 function ProductList({products}) {
     return (
-        <div className="product-list">
+        <Row xs={1} md={2} lg={3} xl={4} className='g-4'>
             {products.map((product) => (
-                <ProductItem 
-                    key={product.id}
-                    product={product}
-                />
+                <Col>
+                    <ProductItem product={product} />
+                </Col>
             ))}
-        </div>
+        </Row>
+        // <div className="product-list">
+        //     {products.map((product) => (
+        //         <ProductItem 
+        //             key={product.id}
+        //             product={product}
+        //         />
+        //     ))}
+        // </div>
     )
 }
 
