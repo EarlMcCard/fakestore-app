@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import {Row, Col, Container} from 'react-bootstrap'
 import ProductList from '../components/ProductList';
 import FilterBar from '../components/FilterBar';
+import Sidebar from '../components/Sidebar'
 
 function ProductPage({products}) {
 
@@ -14,15 +16,26 @@ function ProductPage({products}) {
   });
 
   return (
-    <div className="container mt-4">
-      <FilterBar 
-        searchTerm={searchTerm}
-        onSearchChange={(value) => setSearchTerm(value)}
-        onCategoryChange={(category) => setFilterCategory(category)}
-      />
-      <hr />
-      <ProductList products={displayedProducts} />
-    </div>
+    <Container fluid>
+      <Row>
+        <Col md={3} lg={2} className='px-0 d-none d-md-block'>
+          <Sidebar />
+        </Col>
+
+        <Col md={9} lg={10} className='p-4'>
+          <header className="mb-4">
+            <h2>Inventory</h2>
+            <FilterBar
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onCategoryChange={setFilterCategory}
+            />
+          </header>
+
+          <ProductList products={displayedProducts} />
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

@@ -5,19 +5,12 @@ function ProductList({products}) {
     return (
         <Row xs={1} md={2} lg={3} xl={4} className='g-4'>
             {products.map((product) => (
-                <Col>
+                <Col key={product.id}>
                     <ProductItem product={product} />
                 </Col>
             ))}
         </Row>
-        // <div className="product-list">
-        //     {products.map((product) => (
-        //         <ProductItem 
-        //             key={product.id}
-        //             product={product}
-        //         />
-        //     ))}
-        // </div>
+
     )
 }
 
